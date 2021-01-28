@@ -21,7 +21,7 @@
 //   },
 // ];
 
-const api ="http://localhost:3000/api";
+const api = window.ENV.UI_API_ENDPOINT;
 
 class IssueFilter extends React.Component {
   render() {
@@ -39,7 +39,6 @@ class IssueTable extends React.Component {
   }
 
   render() {
-    console.log("in render of IssueTable");
     const style = { border: "1px solid silver", padding: 4 };
     const issueRows = this.props.issues.map((issue) => (
       <IssueRow key={issue.id} rowStye={style} issue={issue} />
@@ -237,11 +236,9 @@ class IssueList extends React.Component {
   // }
 
   async loadData() {
-    console.log("load data?")
     await fetch(api + "/issues")
       .then((response) => response.json())
       .then((data) => {
-        //console.log(data);
         this.setState({ issues: data.issues });
       });
   }
@@ -271,7 +268,6 @@ class IssueList extends React.Component {
   }
 
   render() {
-    console.log("render of issueList")
     return (
       <React.Fragment>
         <h1>IssueList tracker</h1>

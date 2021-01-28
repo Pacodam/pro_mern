@@ -47,7 +47,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.g
 //     title: "Missing bottom border on panel",
 //   },
 // ];
-var api = "http://localhost:3000/api";
+var api = window.ENV.UI_API_ENDPOINT;
 
 var IssueFilter = /*#__PURE__*/function (_React$Component) {
   _inherits(IssueFilter, _React$Component);
@@ -92,7 +92,6 @@ var IssueTable = /*#__PURE__*/function (_React$Component2) {
   _createClass(IssueTable, [{
     key: "render",
     value: function render() {
-      console.log("in render of IssueTable");
       var style = {
         border: "1px solid silver",
         padding: 4
@@ -333,18 +332,16 @@ var IssueList = /*#__PURE__*/function (_React$Component5) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log("load data?");
-                _context.next = 3;
+                _context.next = 2;
                 return fetch(api + "/issues").then(function (response) {
                   return response.json();
                 }).then(function (data) {
-                  //console.log(data);
                   _this4.setState({
                     issues: data.issues
                   });
                 });
 
-              case 3:
+              case 2:
               case "end":
                 return _context.stop();
             }
@@ -410,7 +407,6 @@ var IssueList = /*#__PURE__*/function (_React$Component5) {
   }, {
     key: "render",
     value: function render() {
-      console.log("render of issueList");
       return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h1", null, "IssueList tracker"), /*#__PURE__*/React.createElement(IssueFilter, null), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueTable, {
         issues: this.state.issues
       }), /*#__PURE__*/React.createElement("hr", null), /*#__PURE__*/React.createElement(IssueAdd, {
