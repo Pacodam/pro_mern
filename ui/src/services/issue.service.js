@@ -1,14 +1,17 @@
-import http from "../helpers/http-common";
+import http from "./http-common";
 
-class IssueDataService{
-  
-    getAll() {
-        return http.get("/issues");
-    }
+class IssueDataService {
+  getAll() {
+    return http.get("/issues");
+  }
 
-    create(data){
-        return http.post("/issue")
-    }
+  create(data) {
+    return http.post("/issue", data);
+  }
+
+  // get(id) {
+  //     return http.get(`/tutorials/${id}`)
+  // }
 }
 
 export default new IssueDataService();
