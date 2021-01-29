@@ -1,4 +1,4 @@
-//import IssueDataService from "../services/issue.service";
+import IssueDataService from "../services/issue.service";
 
 // const issues = [
 //   {
@@ -218,23 +218,7 @@ class IssueList extends React.Component {
     this.loadData();
   }
 
-  // async loadData() {
-  //   // setTimeout(() => {
-  //   //     this.setState({issues : initialIssues});
-  //   // }, 500);
-  //   //  console.log("retrieve");
-  //   // const response = await fetch("http://localhost:3000/api/issues");
-  //   // console.log(response);
-  //   // const result =  response.json();
-  //   // this.setState({ issues: result.data.issues });
-  //   await fetch("http://localhost:3000/api/issues")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       //console.log(data);
-  //       this.setState({ issues: data.issues });
-  //     });
-  // }
-
+  
   async loadData() {
     await fetch(api + "/issues")
       .then((response) => response.json())

@@ -9,12 +9,13 @@ app.use("/", fileServerMiddleware);
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
-
+//option for enabling cors
 const cors = require('cors');
 var corsOptions = {
   origin: "http://localhost:8000"
 };
 app.use(cors(corsOptions));
+
 
 require('dotenv').config();
 

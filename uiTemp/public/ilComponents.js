@@ -2,6 +2,10 @@
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+var _issue = _interopRequireDefault(require("../services/issue.service"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -26,7 +30,6 @@ function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Re
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
-//import IssueDataService from "../services/issue.service";
 // const issues = [
 //   {
 //     id: 1,
@@ -305,23 +308,7 @@ var IssueList = /*#__PURE__*/function (_React$Component5) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.loadData();
-    } // async loadData() {
-    //   // setTimeout(() => {
-    //   //     this.setState({issues : initialIssues});
-    //   // }, 500);
-    //   //  console.log("retrieve");
-    //   // const response = await fetch("http://localhost:3000/api/issues");
-    //   // console.log(response);
-    //   // const result =  response.json();
-    //   // this.setState({ issues: result.data.issues });
-    //   await fetch("http://localhost:3000/api/issues")
-    //     .then((response) => response.json())
-    //     .then((data) => {
-    //       //console.log(data);
-    //       this.setState({ issues: data.issues });
-    //     });
-    // }
-
+    }
   }, {
     key: "loadData",
     value: function () {
