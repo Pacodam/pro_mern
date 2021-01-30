@@ -21,9 +21,12 @@ export default class IssueList extends Component {
   async loadData() {
     await IssueDataService.getAll()
       .then((response) => {
-        this.setState({
-          issues: response.data.issues,
-        });
+        console.log("response", response);
+        if (response.data) {
+          this.setState({
+            issues: response.data,
+          });
+        }
       })
       .catch((e) => {
         console.log(e);

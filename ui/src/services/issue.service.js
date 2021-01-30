@@ -6,7 +6,7 @@ class IssueDataService {
   }
 
   create(data) {
-    return http.post("/issue", data);
+    return http.post("/issues", data);
   }
 
   // get(id) {
