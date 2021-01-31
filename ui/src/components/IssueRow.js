@@ -32,6 +32,7 @@ export default class IssueRow extends Component {
         <td>{issue.effort}</td>
         <td>{issue.due ? new Date(issue.due).toLocaleDateString() : ""}</td>
         <td>{issue.title}</td>
+        <td><a href={`/#/edit/${issue.id}`}>Edit</a></td>
       </tr>
     );
   }

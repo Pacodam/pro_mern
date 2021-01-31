@@ -1,12 +1,16 @@
 const db = require("../models");
 const Issue = db.issues;
+//const StatusType = require("../lib/StatusType");
 
 exports.findAll = (req, res) => {
   // const title = req.query.title;
   // var condition = title
   //   ? { title: { $regex: new RegExp(title), $options: "i" } }
   //   : {};
-  Issue.find()
+  let filter = {};
+  if(req.query.vars) filter = JSON.parse(req.query.vars);
+  
+  Issue.find(filter)
     .then((data) => {
       res.send(data);
     })
@@ -19,6 +23,7 @@ exports.findAll = (req, res) => {
 };
 
 exports.create = (req, res) => {
+  console.log(req.body);
   if (!req.body.title) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
@@ -48,6 +53,13 @@ exports.create = (req, res) => {
       });
     });
 };
+
+// enum StatusType {
+//   New
+//   Assigned
+//   Fixed
+//   Closed
+// }
 
 // //get issues
 // app.get("/api/issues", (req, res) => {

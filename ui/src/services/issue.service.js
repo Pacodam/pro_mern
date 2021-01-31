@@ -1,8 +1,8 @@
 import http from "./http-common";
 
 class IssueDataService {
-  getAll() {
-    return http.get("/issues");
+  getAll(vars) {
+    return http.get("/issues", {params: {vars}});
   }
 
   create(data) {

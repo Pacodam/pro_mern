@@ -25,6 +25,7 @@ export default class IssueTable extends Component {
               <th>Effort</th>
               <th>Due Date</th>
               <th>Title</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>{issueRows}</tbody>

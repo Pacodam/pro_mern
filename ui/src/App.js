@@ -1,11 +1,12 @@
-import IssueList from './components/IssueList';
-import './App.css';
+import { HashRouter as Router } from "react-router-dom";
+import "./App.css";
+import Page from "./components/Page";
 
 function App() {
   return (
-    <div >
-     <IssueList />
-    </div>
+    <Router>
+      <Page />
+    </Router>
   );
 }
 

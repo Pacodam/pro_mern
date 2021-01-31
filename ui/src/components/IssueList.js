@@ -18,10 +18,31 @@ export default class IssueList extends Component {
     this.loadData();
   }
 
+  componentDidUpdate(prevProps) {
+    const {
+      location: { search: prevSearch },
+    } = prevProps;
+    const {
+      location: { search },
+    } = this.props;
+    if (prevSearch !== search) {
+      this.loadData();
+    }
+  }
+
   async loadData() {
-    await IssueDataService.getAll()
+    //parsing the query string
+    const {
+      location: { search },
+    } = this.props;
+    const params = new URLSearchParams(search);
+
+    const vars = {};
+    if (params.get("status")) vars.status = params.get("status");
+
+    await IssueDataService.getAll(vars)
       .then((response) => {
-        console.log("response", response);
+        //console.log("response", response);
         if (response.data) {
           this.setState({
             issues: response.data,
@@ -36,7 +57,7 @@ export default class IssueList extends Component {
   async addIssue(issue) {
     await IssueDataService.create(issue)
       .then((response) => {
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
