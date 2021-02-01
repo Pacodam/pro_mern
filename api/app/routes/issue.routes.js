@@ -14,5 +14,7 @@ module.exports = app => {
 
     router.get("/", issues.findAll);
 
+    router.get("/:id", issues.findOne);
+
     app.use('/api/issues', router);
 }

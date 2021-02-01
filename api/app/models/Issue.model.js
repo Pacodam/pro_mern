@@ -9,6 +9,9 @@ module.exports = (mongoose) => {
       effort: String,
       due: Date,
       title: String,
+      description: String,
+      effortMin: Number,
+      effortMax: Number,
     })
   );
   return Issue;

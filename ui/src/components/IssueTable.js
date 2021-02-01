@@ -1,62 +1,50 @@
 import React, {Component} from 'react';
-import IssueRow from './IssueRow.js';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 
-export default class IssueTable extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        issues: [],
-      };
-    }
-  
-    render() {
-      const style = { border: "1px solid silver", padding: 4 };
-      const issueRows = this.props.issues.map((issue) => (
-        <IssueRow key={issue.id} rowStye={style} issue={issue} />
-      ));
-      return (
-        <table className="bordered-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Status</th>
-              <th>Owner</th>
-              <th>Created</th>
-              <th>Effort</th>
-              <th>Due Date</th>
-              <th>Title</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>{issueRows}</tbody>
-        </table>
-      );
-    }
-  }
+const IssueRow = withRouter(({ issue, location: { search } }) => {
+  const selectLocation = { pathname: `/issues/${issue.id}`, search };
+ 
+  return (
+    <tr>
+      <td>{issue.id}</td>
+      <td>{issue.status}</td>
+      <td>{issue.owner}</td>
+      <td>{new Date(issue.created).toLocaleDateString()}</td>
+        <td>{issue.effort}</td>
+        <td>{issue.due ? new Date(issue.due).toLocaleDateString() : ""}</td>
+      <td>{issue.title}</td>
+      <td>
+        <Link to={`/edit/${issue.id}`}>Edit</Link>
+        {' | '}
+        <NavLink to={selectLocation}>Select</NavLink>
+      </td>
+    </tr>
+  );
+});
 
-//   /**EXAMPLE WITH THIS.PROPS.CHILDREN */
-// class IssueTable extends React.Component {
-//   render() {
-//     const style = { border: "1px solid silver", padding: 4 };
-//     return (
-//       <table style={{ borderCollapse: "collapse" }}>
-//         <thead>
-//           <tr>
-//             <th style={style}>ID</th>
-//             <th style={style}>Title</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           <IssueRow rowStyle={style} issue_title="todo1" issue_id={1}>
-//             Error in console when clicking Add
-//           </IssueRow>
-//           <IssueRow rowStyle={style} issue_title="todo2" issue_id={2}>
-//             <div>
-//               Missing <b>bottom</b> border on panel
-//             </div>
-//           </IssueRow>
-//         </tbody>
-//       </table>
-//     );
-//   }
-// }
+export default function IssueTable({ issues }) {
+ 
+  const issueRows = issues.map(issue => (
+    <IssueRow key={issue.id} issue={issue} />
+  ));
+
+  return (
+    <table className="bordered-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Status</th>
+          <th>Owner</th>
+          <th>Created</th>
+          <th>Effort</th>
+          <th>Due Date</th>
+          <th>Title</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {issueRows}
+      </tbody>
+    </table>
+  );
+}

@@ -9,9 +9,9 @@ class IssueDataService {
     return http.post("/issues", data);
   }
 
-  // get(id) {
-  //     return http.get(`/tutorials/${id}`)
-  // }
+  get(id) {
+      return http.get(`/issues/${id}`)
+  }
 }
 
 export default new IssueDataService();

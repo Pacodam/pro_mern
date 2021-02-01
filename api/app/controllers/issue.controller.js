@@ -9,8 +9,13 @@ exports.findAll = (req, res) => {
   //   : {};
   let filter = {};
   if(req.query.vars) filter = JSON.parse(req.query.vars);
+  //TODO: should be simpler
+  let query = {};
+  if(filter.status !== undefined) query.status = filter.status;
+  if(filter.effortMin !== undefined) query.effortMin = {$lte : filter.effortMin};
+  if(filter.effortMax !== undefined) query.effortMax = {$gte : filter.effortMax};
   
-  Issue.find(filter)
+  Issue.find( query )
     .then((data) => {
       res.send(data);
     })
@@ -38,6 +43,9 @@ exports.create = (req, res) => {
     created: new Date(req.body.created),
     due: new Date(),
     title: req.body.title,
+    description: "description",
+    effortMin: 2,
+    effortMax: 20
   });
 
   // Save Issue in the database
@@ -54,50 +62,20 @@ exports.create = (req, res) => {
     });
 };
 
-// enum StatusType {
-//   New
-//   Assigned
-//   Fixed
-//   Closed
-// }
+exports.findOne = (req, res) => {
 
-// //get issues
-// app.get("/api/issues", (req, res) => {
-//   res.json({ issues: issuesDB });
-// });
+   const filter = { "id" : req.params.id};
+   
+   Issue.findOne(filter)
+   .then((data) => {
+     if(!data)
+     res.status(404).send({ message: "Not found issue with id " + id });
+    else res.send(data);
+    })
+    .catch((err) => {
+      res
+      .status(500)
+      .send({ message: "Error retrieving Issue with id=" + id});
+    });
+};
 
-// app.post("/api/issue", (req, res) => {
-//   console.log("post?", req.body)
-//   const issue = {
-//     id: req.body.id,
-//     status: "New",
-//     owner: req.body.owner,
-//     effort: 5,
-//     created: new Date(req.body.created),
-//     due: new Date(),
-//     title: req.body.title,
-//   }
-//   issuesDB.push(issue);
-//   console.log(issuesDB);
-// })
-
-// const issuesDB = [
-//   {
-//     id: 1,
-//     status: "New",
-//     owner: "Ravan",
-//     effort: 5,
-//     created: new Date("2018-08-15"),
-//     due: undefined,
-//     title: "Error in console when clicking Add",
-//   },
-//   {
-//     id: 2,
-//     status: "Assigned",
-//     owner: "Eddie",
-//     effort: 14,
-//     created: new Date("2019-01-16"),
-//     due: new Date("2019-02-01"),
-//     title: "Missing bottom border on panel",
-//   },
-// ];

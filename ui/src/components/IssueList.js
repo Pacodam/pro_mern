@@ -3,7 +3,8 @@ import IssueFilter from "./IssueFilter";
 import IssueTable from "./IssueTable";
 import IssueAdd from "./IssueAdd";
 import IssueDataService from "../services/issue.service";
-
+import IssueDetail from "./IssueTable";
+import { Route } from "react-router-dom";
 //const api = window.ENV.UI_API_ENDPOINT; //TODO: environment variables
 
 export default class IssueList extends Component {
@@ -19,6 +20,7 @@ export default class IssueList extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log("in did update");
     const {
       location: { search: prevSearch },
     } = prevProps;
@@ -27,6 +29,7 @@ export default class IssueList extends Component {
     } = this.props;
     if (prevSearch !== search) {
       this.loadData();
+      console.log("loading data in did update");
     }
   }
 
@@ -40,13 +43,19 @@ export default class IssueList extends Component {
     const vars = {};
     if (params.get("status")) vars.status = params.get("status");
 
+    const effortMin = parseInt(params.get("effortMin"), 10);
+    if (!Number.isNaN(effortMin)) vars.effortMin = effortMin;
+    const effortMax = parseInt(params.get("effortMax"), 10);
+    if (!Number.isNaN(effortMax)) vars.effortMax = effortMax;
+
     await IssueDataService.getAll(vars)
       .then((response) => {
-        //console.log("response", response);
+        console.log("response", response);
         if (response.data) {
           this.setState({
             issues: response.data,
           });
+          // console.log(response.data);
         }
       })
       .catch((e) => {
@@ -69,20 +78,27 @@ export default class IssueList extends Component {
     issue.id = this.state.issues.length + 1;
     issue.created = new Date().toDateString();
     //take a look at inmutable.js for making copys of objects
-    console.log("issue:", issue);
     this.addIssue(issue);
     this.loadData();
   }
 
+  componentDidMount;
+
   render() {
+    const { issues } = this.state;
+
+    const { match } = this.props;
+
     return (
       <React.Fragment>
         <h1>IssueList tracker</h1>
         <IssueFilter />
         <hr />
-        <IssueTable issues={this.state.issues} />
+        <IssueTable issues={issues} />
         <hr />
         <IssueAdd createIssue={this.createIssue} />
+        <hr />
+        <Route path={`${match.path}/:id`} component={IssueDetail} />
       </React.Fragment>
     );
   }
