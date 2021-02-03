@@ -6,12 +6,10 @@ module.exports = (mongoose) => {
       status: String,
       owner: String,
       created: Date,
-      effort: String,
+      effort: Number,
       due: Date,
       title: String,
       description: String,
-      effortMin: Number,
-      effortMax: Number,
     })
   );
   return Issue;

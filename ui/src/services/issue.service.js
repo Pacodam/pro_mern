@@ -2,7 +2,7 @@ import http from "./http-common";
 
 class IssueDataService {
   getAll(vars) {
-    return http.get("/issues", {params: {vars}});
+    return http.get("/issues", { params: { vars } });
   }
 
   create(data) {
@@ -10,7 +10,15 @@ class IssueDataService {
   }
 
   get(id) {
-      return http.get(`/issues/${id}`)
+    return http.get(`/issues/${id}`);
+  }
+
+  update(id, data) {
+    return http.put(`/issues/${id}`, data);
+  }
+
+  delete(id) {
+    return http.delete(`/issues/${id}`);
   }
 }
 

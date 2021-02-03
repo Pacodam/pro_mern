@@ -3,8 +3,12 @@ import IssueFilter from "./IssueFilter";
 import IssueTable from "./IssueTable";
 import IssueAdd from "./IssueAdd";
 import IssueDataService from "../services/issue.service";
+import DeletedIssueService from "../services/deleted_issue.service";
 import IssueDetail from "./IssueTable";
 import { Route } from "react-router-dom";
+
+import { Label } from "react-bootstrap";
+
 //const api = window.ENV.UI_API_ENDPOINT; //TODO: environment variables
 
 export default class IssueList extends Component {
@@ -13,6 +17,8 @@ export default class IssueList extends Component {
     this.state = { issues: [] };
     this.createIssue = this.createIssue.bind(this);
     this.loadData = this.loadData.bind(this);
+    this.closeIssue = this.closeIssue.bind(this);
+    this.deleteIssue = this.deleteIssue.bind(this);
   }
 
   componentDidMount() {
@@ -20,7 +26,6 @@ export default class IssueList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("in did update");
     const {
       location: { search: prevSearch },
     } = prevProps;
@@ -82,19 +87,71 @@ export default class IssueList extends Component {
     this.loadData();
   }
 
-  componentDidMount;
+  async closeIssue(index) {
+    const issue = this.state.issues[index];
+    //TODO: statuses as enum list
+    issue.status = "Closed";
+    await IssueDataService.update(issue._id, issue)
+      //TODO: in book, the response is the object modified
+      .then((response) => {
+        this.setState((prevState) => {
+          const newList = [...prevState.issues];
+          //TODO: in book, the response is the object modified
+          //newList[index] = data.issueUpdate;
+          newList[index] = issue;
+          return { issues: newList };
+          //console.log(response.data);
+        });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+
+  async deleteIssue(index) {
+    const _id = this.state.issues[index]._id;
+    let responseIssue = {};
+
+    await IssueDataService.delete(_id)
+      .then((response) => {
+        console.log(response.data);
+        responseIssue = response.data;
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+
+    if (responseIssue !== undefined) {
+      await DeletedIssueService.create(responseIssue)
+        .then((response) => {
+          console.log(response.data);
+          //TODO better set state
+          this.loadData();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  }
 
   render() {
     const { issues } = this.state;
-
+    console.log("this.props", this.props);
     const { match } = this.props;
+    console.log("match", match);
 
     return (
       <React.Fragment>
-        <h1>IssueList tracker</h1>
+        <h1>
+          <Label>IssueList tracker</Label>
+        </h1>
         <IssueFilter />
         <hr />
-        <IssueTable issues={issues} />
+        <IssueTable
+          issues={issues}
+          closeIssue={this.closeIssue}
+          deleteIssue={this.deleteIssue}
+        />
         <hr />
         <IssueAdd createIssue={this.createIssue} />
         <hr />

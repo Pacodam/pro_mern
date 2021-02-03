@@ -44,6 +44,7 @@ app.get("/", (req, res) => {
 });
 
 require("./app/routes/issue.routes")(app);
+require("./app/routes/deleted_issue.routes")(app);
 
 const PORT = process.env.API_SERVER_PORT || 8000;
 

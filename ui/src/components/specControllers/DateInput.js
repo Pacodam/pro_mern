@@ -1,0 +1,85 @@
+import React, { Component } from "react";
+
+
+//TODO RESOLVE THIS NIGHTMARE
+function displayFormat(date) {
+  console.log(date);
+  console.log("display format date", date)
+  return date != null ? date.toDateString() : "";
+ //return date;
+}
+
+function editFormat(date) {
+  console.log("edit format")
+  console.log(date);
+  //console.log(date.toISOString().substr(0,10));
+  return date != null ? date.toISOString().substr(0, 10) : "";
+}
+
+function unformat(str) {
+  const val = new Date(str);
+  return Number.isNaN(val.getTime()) ? null : val;
+}
+
+export default class DataInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: editFormat(props.value),
+      focused: false,
+      valid: true,
+    };
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onChange = this.onChange.bind(this);
+  }
+
+  componentDidMount(){
+    console.log("mounted dateinput")
+  }
+
+  onFocus() {
+    this.setState({ focused: true });
+  }
+
+  onBlur(e) {
+    const { value, valid: oldValid } = this.state;
+    const { onValidityChange, onChange } = this.props;
+    const dateValue = unformat(value);
+    const valid = value === "" || dateValue !== null;
+    if (valid !== oldValid && onValidityChange) {
+      onValidityChange(e, valid);
+    }
+    this.setState({ focused: false, valid });
+    if (valid) onChange(e, dateValue);
+  }
+
+  onChange(e) {
+    if (e.target.value.match(/^[\d-]*%/)) {
+      this.setState({ value: e.target.value });
+    }
+  }
+
+  render() {
+    const { valid, focused, value } = this.state;
+    const { value: origValue, name } = this.props;
+    const className = !valid && !focused ? "invalid" : null;
+    const displayValue = focused || !valid ? value : displayFormat(origValue);
+
+    console.log(this.props.value);
+
+    return (
+      <input
+        type="text"
+        size={20}
+        name={name}
+        className={className}
+        value={displayValue}
+        placeholder={focused ? "yyyy-mm-dd" : null}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
+        onChange={this.onChange}
+      />
+    );
+  }
+}

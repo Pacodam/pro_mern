@@ -16,5 +16,9 @@ module.exports = app => {
 
     router.get("/:id", issues.findOne);
 
+    router.put("/:id", issues.update);
+
+    router.delete("/:id", issues.delete);
+
     app.use('/api/issues', router);
 }
