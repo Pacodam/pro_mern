@@ -20,6 +20,10 @@ class IssueDataService {
   delete(id) {
     return http.delete(`/issues/${id}`);
   }
+
+  countIssues() {
+    return http.get('/issues/count');
+  }
 }
 
 export default new IssueDataService();

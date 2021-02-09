@@ -109,30 +109,40 @@ exports.update = (req, res) => {
     });
 };
 
-
 // findOneAndDelete() returns the deleted document after having deleted it (in case you need its contents after the delete operation);
 // deleteOne() is used to delete a single document
 // remove() is a deprecated function and has been replaced by deleteOne() (to delete a single document) and deleteMany() (to delete multiple documents)
 //Delete an Issue by the id in the request
-//TODO: 
+//TODO:
 exports.delete = (req, res) => {
-  
-  const id  = req.params.id;
-  
+  const id = req.params.id;
+
   //Issue.deleteOne({_id : id}) //this works, which one is better
-  Issue.findByIdAndRemove(id,  { useFindAndModify: false })
-  .then((data) => {
-    //console.log(data);
-    if (!data) {
-      res.status(404).send({
-        message: `Cannot delete Issue with id=${id}. Maybe Issue was not found!`,
+  Issue.findByIdAndRemove(id, { useFindAndModify: false })
+    .then((data) => {
+      //console.log(data);
+      if (!data) {
+        res.status(404).send({
+          message: `Cannot delete Issue with id=${id}. Maybe Issue was not found!`,
+        });
+      } else res.send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not delete Issue with id=" + id,
       });
-    } else res.send(data)   
-   })
-  .catch((err) => {
-    res.status(500).send({
-      message: "Could not delete Issue with id=" + id,
     });
-  });
 };
 
+exports.countIssues = (req, res) => {
+  Issue.countDocuments()
+    .then((data) => {
+      console.log(data);
+      res.send(data.toString());
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Could not count issues",
+      });
+    });
+};

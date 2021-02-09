@@ -9,7 +9,10 @@ import {
   Glyphicon,
   Tooltip,
   OverlayTrigger,
+  Grid,
 } from "react-bootstrap";
+import IssueAddNavItem from './specControllers/IssueAddNavItem';
+
 
 import { LinkContainer } from "react-router-bootstrap";
 
@@ -43,7 +46,7 @@ function NavBar() {
         </LinkContainer>
       </Nav>
       <Nav pullRight>
-        <NavItem>
+        {/*<NavItem>
           <OverlayTrigger
             placement="left"
             delayShow={1000}
@@ -51,7 +54,8 @@ function NavBar() {
           >
             <Glyphicon glyph="plus" />
           </OverlayTrigger>
-        </NavItem>
+        </NavItem> */}
+        <IssueAddNavItem />
         <NavDropdown
           id="user-dropdown"
           title={<Glyphicon glyph="option-vertical" />}
@@ -67,6 +71,7 @@ function NavBar() {
 function Footer() {
   return (
     <small>
+    <hr />
       <p className="text-center">
         Full source code available at this{" "}
         <a href="https://github.com/vasansr/pro-mern-stack-2">
@@ -81,7 +86,9 @@ export default function Page() {
   return (
     <div>
       <NavBar />
-      <Contents />
+      <Grid fluid>
+        <Contents />
+      </Grid>
       <Footer />
     </div>
   );

@@ -1,5 +1,6 @@
 // https://github.com/vasansr/pro-mern-stack-2
 // npm run watch     npm start
+//TODO clean node-modules, something is broken
 require('dotenv').config();
 const express = require("express");
 const cors = require('cors');

@@ -1,24 +1,34 @@
 import React, { Component } from "react";
 import IssueFilter from "./IssueFilter";
 import IssueTable from "./IssueTable";
-import IssueAdd from "./IssueAdd";
+//import IssueAdd from "./IssueAdd";
 import IssueDataService from "../services/issue.service";
 import DeletedIssueService from "../services/deleted_issue.service";
 import IssueDetail from "./IssueTable";
 import { Route } from "react-router-dom";
+import Toast from "./specControllers/Toast";
 
-import { Label } from "react-bootstrap";
+import { Label, Panel } from "react-bootstrap";
 
 //const api = window.ENV.UI_API_ENDPOINT; //TODO: environment variables
 
 export default class IssueList extends Component {
   constructor() {
     super();
-    this.state = { issues: [] };
-    this.createIssue = this.createIssue.bind(this);
+    this.state = {
+      issues: [],
+      toastVisible: false,
+      toastMessage: " ",
+      toastType: "success",
+    };
+
+    // this.createIssue = this.createIssue.bind(this);
     this.loadData = this.loadData.bind(this);
     this.closeIssue = this.closeIssue.bind(this);
     this.deleteIssue = this.deleteIssue.bind(this);
+    this.showSuccess = this.showSuccess.bind(this);
+    this.showError = this.showSuccess.bind(this);
+    this.dismissToast = this.dismissToast.bind(this);
   }
 
   componentDidMount() {
@@ -68,24 +78,27 @@ export default class IssueList extends Component {
       });
   }
 
-  async addIssue(issue) {
-    await IssueDataService.create(issue)
-      .then((response) => {
-        //console.log(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }
+  // async addIssue(issue) {
+  //   await IssueDataService.create(issue)
+  //     .then((response) => {
+  //       //console.log(response.data);
+  //       //TODO: after refactoring fetching to better way of work, end toasts in the rest of places
+  //       this.showSuccess("Issue created");
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //       this.showError("Problem creating new issue");
+  //     });
+  // }
 
-  //received from IssueAdd (child)
-  createIssue(issue) {
-    issue.id = this.state.issues.length + 1;
-    issue.created = new Date().toDateString();
-    //take a look at inmutable.js for making copys of objects
-    this.addIssue(issue);
-    this.loadData();
-  }
+  // //received from IssueAdd (child)
+  // createIssue(issue) {
+  //   issue.id = this.state.issues.length + 1;
+  //   issue.created = new Date().toDateString();
+  //   //take a look at inmutable.js for making copys of objects
+  //   this.addIssue(issue);
+  //   this.loadData();
+  // }
 
   async closeIssue(index) {
     const issue = this.state.issues[index];
@@ -134,28 +147,57 @@ export default class IssueList extends Component {
     }
   }
 
+  showSuccess(message) {
+    this.setState({
+      toastVisible: true,
+      toastMessage: message,
+      toastType: "success",
+    });
+  }
+  showError(message) {
+    this.setState({
+      toastVisible: true,
+      toastMessage: message,
+      toastType: "danger",
+    });
+  }
+  dismissToast() {
+    this.setState({ toastVisible: false });
+  }
+
   render() {
     const { issues } = this.state;
     console.log("this.props", this.props);
     const { match } = this.props;
     console.log("match", match);
+    const { toastVisible, toastMessage, toastType } = this.state;
 
     return (
       <React.Fragment>
-        <h1>
-          <Label>IssueList tracker</Label>
-        </h1>
-        <IssueFilter />
-        <hr />
+        <Panel>
+          <Panel.Heading>
+            <Panel.Title toggle>Filter</Panel.Title>
+          </Panel.Heading>
+          <Panel.Body collapsible>
+            <IssueFilter />
+          </Panel.Body>
+        </Panel>
         <IssueTable
           issues={issues}
           closeIssue={this.closeIssue}
           deleteIssue={this.deleteIssue}
         />
-        <hr />
-        <IssueAdd createIssue={this.createIssue} />
-        <hr />
+
+       {/* <IssueAdd createIssue={this.createIssue} /> */}
+
         <Route path={`${match.path}/:id`} component={IssueDetail} />
+        <Toast
+showing={toastVisible}
+onDismiss={this.dismissToast}
+bsStyle={toastType}
+>
+{toastMessage}
+</Toast>
       </React.Fragment>
     );
   }

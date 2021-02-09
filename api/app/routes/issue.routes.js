@@ -10,15 +10,24 @@ module.exports = app => {
 
     var router = require("express").Router();
 
+    
+
     router.post("/", issues.create);
+
+    //TODO count in restful?
+     router.get("/count", issues.countIssues);
 
     router.get("/", issues.findAll);
 
     router.get("/:id", issues.findOne);
 
+   
+
     router.put("/:id", issues.update);
 
     router.delete("/:id", issues.delete);
+
+    
 
     app.use('/api/issues', router);
 }
